@@ -1,0 +1,51 @@
+---
+title: "Stat 3301: Homework 1"
+author: "Jane Weissberg (weissberg.11)"
+date: "2024-08-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(readr)
+library(tidyverse)
+library(alr4)
+
+# Load the dataset
+ames_data <- read_csv("ames_real_estate.csv")
+```
+
+Question 1
+
+Import the data set ames_real_estate.csv (which is available on Carmen) and use it to do the following:
+Find the smallest and largest observed sale prices separately for each neighborhood.
+Make a scatterplot with the square footage of the house on the x-axis and the sale price of the house on the y-axis.
+Write a sentence describing how the relationship between SalePrice and SqFt.
+
+Solution to Question 1
+```{r, cache=TRUE}
+price_summary <- ames_data %>%
+  group_by(Neighborhood) %>%
+  summarize(
+    MinPrice = min(SalePrice, na.rm = TRUE),
+    MaxPrice = max(SalePrice, na.rm = TRUE)
+  )
+print(price_summary)
+
+ggplot(ames_data, aes(x=SqFt,y=SalePrice))+geom_point()+labs(x = "Square Footage", y = "Sale Price", title = "Scatterplot of Square Footage vs. Sale Price") + theme_minimal()
+```
+
+There is a positive relationship between square footage and sales price, indicating that as the size of the house increases, so does the price.
+
+Question 2
+
+Use the data set Heights from the libraryalr4 to calculate the average height for daughters whose mothers are at least 65 inches tall. (The purpose of this question is to make sure you have the package installed correctly.)
+
+Solution to Question 2
+
+```{r, cache=TRUE}
+heights_data <- Heights
+average_height <- heights_data %>%
+  filter(mheight >= 65) %>%
+  summarize(AvgHeight = mean(dheight, na.rm = TRUE))
+print(average_height)
+```
